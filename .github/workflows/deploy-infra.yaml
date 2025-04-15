@@ -12,6 +12,12 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to apply (e.g., dev, prod)'
+        required: true
+        default: 'dev'
 
 env:
   TF_VERSION: 1.6.4
@@ -33,32 +39,49 @@ jobs:
         working-directory: ${{ env.TF_WORKING_DIR }}
 
     steps:
+      # Checkout the repository
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      # Configure AWS credentials
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: ${{ secrets.AWS_TERRAFORM_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
 
+      # Setup Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: ${{ env.TF_VERSION }}
 
+      # Cache Terraform modules to speed up builds
+      - name: Cache Terraform Modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.terraform.d
+          key: terraform-${{ runner.os }}-${{ hashFiles('**/*.tf') }}
+          restore-keys: |
+            terraform-${{ runner.os }}-
+
+      # Terraform Init
       - name: Terraform Init
         run: terraform init
 
+      # Terraform Format Check
       - name: Terraform Format
         run: terraform fmt -check -recursive
 
+      # Terraform Validate
       - name: Terraform Validate
         run: terraform validate
 
+      # Terraform Plan
       - name: Terraform Plan
-        run: terraform plan -var-file=${{ inputs.environment }}.tfvars
+        run: terraform plan -var-file=${{ github.event.inputs.environment }}.tfvars
 
+      # Manual approval for Terraform Apply (only for main branch)
       - name: Terraform Apply (Manual Approval)
         if: github.ref == 'refs/heads/main'
-        run: terraform apply -auto-approve -var-file=${{ inputs.environment }}.tfvars
+        run: terraform apply -auto-approve -var-file=${{ github.event.inputs.environment }}.tfvars
