@@ -1,12 +1,12 @@
 # VPC module
 module "vpc" {
-  source             = "../../modules/vpc"
-  project_name       = var.project_name
-  cidr_block         = var.cidr_block
-  azs                 = var.azs  # Match the variable name 'azs'
-  public_subnet_cidrs = var.public_subnet_cidrs  # Match the variable name 'public_subnet_cidrs'
-  private_subnet_cidrs = var.private_subnet_cidrs  # Match the variable name 'private_subnet_cidrs'
-  vpc_name            = var.vpc_name  # Make sure this is passed
+  source               = "../../modules/vpc"
+  project_name         = var.project_name
+  cidr_block           = var.cidr_block
+  azs                  = var.azs                  # Match the variable name 'azs'
+  public_subnet_cidrs  = var.public_subnet_cidrs  # Match the variable name 'public_subnet_cidrs'
+  private_subnet_cidrs = var.private_subnet_cidrs # Match the variable name 'private_subnet_cidrs'
+  vpc_name             = var.vpc_name             # Make sure this is passed
 }
 
 # EKS module
