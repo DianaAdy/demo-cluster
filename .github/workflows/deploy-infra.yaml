@@ -77,12 +77,15 @@ jobs:
       - name: Terraform Validate
         run: terraform validate
 
+      # Debug input to check environment value
+      - name: Debug Environment
+        run: echo "Environment: ${{ github.event.inputs.environment }}"
+
       # Terraform Plan
       - name: Terraform Plan
-        run: terraform plan -var-file=environments/${{ github.event.inputs.environment }}/${{ github.event.inputs.environment }}.tfvars
+        run: terraform plan -var-file=environments/${{ github.event.inputs.environment || 'dev' }}/${{ github.event.inputs.environment || 'dev' }}.tfvars
 
       # Manual approval for Terraform Apply (only for main branch)
       - name: Terraform Apply (Manual Approval)
         if: github.ref == 'refs/heads/main'
-        run: terraform apply -auto-approve -var-file=environments/${{ github.event.inputs.environment }}/${{ github.event.inputs.environment }}.tfvars
-
+        run: terraform apply -auto-approve -var-file=environments/${{ github.event.inputs.environment || 'dev' }}/${{ github.event.inputs.environment || 'dev' }}.tfvars
