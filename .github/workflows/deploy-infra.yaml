@@ -15,7 +15,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Environment to apply (e.g., dev, prod)'
+        description: 'Environment to deploy'
         required: true
         default: 'dev'
 
@@ -79,7 +79,7 @@ jobs:
 
       # Terraform Plan
       - name: Terraform Plan
-        run: terraform plan -var-file=environments/${{ inputs.environment }}/${{ inputs.environment }}.tfvars
+        run: terraform plan -var-file=environments/${{ github.event.inputs.environment }}/${{ github.event.inputs.environment }}.tfvars
 
       # Manual approval for Terraform Apply (only for main branch)
       - name: Terraform Apply (Manual Approval)
