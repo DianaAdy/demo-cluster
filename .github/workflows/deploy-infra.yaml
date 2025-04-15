@@ -67,6 +67,17 @@ jobs:
           restore-keys: |
             terraform-${{ runner.os }}-
 
+      - name: Set Environment Variable
+        id: env
+        run: |
+          ENVIRONMENT=${{ github.event.inputs.environment }}
+          if [ -z "$ENVIRONMENT" ]; then
+            ENVIRONMENT="dev"
+          fi
+          echo "ENVIRONMENT=$ENVIRONMENT" >> $GITHUB_OUTPUT
+
+
+
       # Terraform Init
       - name: Terraform Init
         run: terraform init
@@ -81,9 +92,9 @@ jobs:
 
       # Terraform Plan
       - name: Terraform Plan
-        run: terraform plan -var-file=environments/dev/dev.tfvars
+        run: terraform plan -var-file=environments/${{ steps.env.outputs.ENVIRONMENT }}/${{ steps.env.outputs.ENVIRONMENT }}.tfvars
 
       # Manual approval for Terraform Apply (only for main branch)
       - name: Terraform Apply (Manual Approval)
         if: github.ref == 'refs/heads/main'
-        run: terraform apply -auto-approve -var-file=environments/${{ github.event.inputs.environment || 'dev' }}/${{ github.event.inputs.environment || 'dev' }}.tfvars
+        run: terraform apply -auto-approve -var-file=environments/${{ steps.env.outputs.ENVIRONMENT }}/${{ steps.env.outputs.ENVIRONMENT }}.tfvars
