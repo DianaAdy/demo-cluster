@@ -1,6 +1,6 @@
 # VPC module
 module "vpc" {
-  source             = "./modules/vpc"
+  source             = "../modules/vpc"
   project_name       = var.project_name
   cidr_block         = var.cidr_block
   availability_zones = var.availability_zones
@@ -10,7 +10,7 @@ module "vpc" {
 
 # EKS module
 module "eks" {
-  source                       = "./modules/eks"
+  source                       = "../modules/eks"
   public_subnet_ids            = module.vpc.public_subnet_ids
   vpc_id                       = module.vpc.vpc_id
   cluster_name                 = var.cluster_name
