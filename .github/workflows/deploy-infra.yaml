@@ -77,10 +77,6 @@ jobs:
       - name: Terraform Validate
         run: terraform validate
 
-      # Debug input to check environment value
-      - name: Debug Environment
-        run: echo "Environment: ${{ github.event.inputs.environment }}"
-
       # Terraform Plan
       - name: Terraform Plan
         run: terraform plan -var-file=environments/${{ github.event.inputs.environment || 'dev' }}/${{ github.event.inputs.environment || 'dev' }}.tfvars
