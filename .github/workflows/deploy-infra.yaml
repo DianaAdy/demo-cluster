@@ -22,7 +22,7 @@ on:
 env:
   TF_VERSION: 1.6.4
   AWS_REGION: us-west-2
-  TF_WORKING_DIR: environments/dev
+  TF_WORKING_DIR: . 
 
 jobs:
   terraform:
@@ -91,11 +91,8 @@ jobs:
         run: terraform validate
 
       # Terraform Plan
+      - name: Terraform Init
+        run: terraform -chdir=environments/dev init
+
       - name: Terraform Plan
-        run: terraform plan -var-file=dev/dev.tfvars
-
-
-      # Manual approval for Terraform Apply (only for main branch)
-      - name: Terraform Apply (Manual Approval)
-        if: github.ref == 'refs/heads/main'
-        run: terraform apply -auto-approve -var-file=environments/${{ steps.env.outputs.ENVIRONMENT }}/${{ steps.env.outputs.ENVIRONMENT }}.tfvars
+        run: terraform -chdir=environments/dev plan -var-file=dev.tfvars
