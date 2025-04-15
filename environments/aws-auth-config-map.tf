@@ -27,7 +27,7 @@ EOT
     # Add the IAM user `mike` here
     mapUsers = <<EOT
 - userarn: arn:aws:iam::160885273651:user/diana
-  username: mike
+  username: diana
   groups:
     - system:masters
 EOT
