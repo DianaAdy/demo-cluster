@@ -90,7 +90,7 @@ jobs:
 
       # Terraform Plan
       - name: Terraform Init
-        run: terraform -chdir=environments/dev init
+        run: terraform -chdir=environments/${{ github.event.inputs.environment }} init -reconfigure
 
       - name: Terraform Plan
         run: terraform -chdir=environments/dev plan -var-file=dev.tfvars -var="github_actions_terraform_role=${{ secrets.AWS_TERRAFORM_ROLE }}"
