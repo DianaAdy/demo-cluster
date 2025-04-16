@@ -85,6 +85,7 @@ jobs:
         run: |
           echo "ENVIRONMENT: $ENVIRONMENT"
           echo "Variable file path: environments/$ENVIRONMENT/dev.tfvars"
+          ls -l environments/$ENVIRONMENT/dev.tfvars  # Check if the file exists
 
       # Terraform Format Check
       - name: Terraform Format
