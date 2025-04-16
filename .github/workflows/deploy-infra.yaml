@@ -70,14 +70,11 @@ jobs:
           restore-keys: |
             terraform-${{ runner.os }}-
 
-      # Set Environment Variable
+      # Set Environment Variable (updated to correctly default to 'dev')
       - name: Set Environment Variable
         id: env
         run: |
-          ENVIRONMENT=${{ github.event.inputs.environment }}
-          if [ -z "$ENVIRONMENT" ]; then
-            ENVIRONMENT="dev"
-          fi
+          ENVIRONMENT="${{ github.event.inputs.environment || 'dev' }}"
           echo "ENVIRONMENT=$ENVIRONMENT" >> $GITHUB_OUTPUT
 
       # Debug: Print ENVIRONMENT and check the file path
