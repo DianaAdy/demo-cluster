@@ -80,11 +80,6 @@ jobs:
           echo "ENVIRONMENT=$ENVIRONMENT" >> $GITHUB_OUTPUT
 
 
-
-      # Terraform Init
-      - name: Terraform Init
-        run: terraform init
-
       # Terraform Format Check
       - name: Terraform Format
         run: terraform fmt -check -recursive
@@ -99,3 +94,7 @@ jobs:
 
       - name: Terraform Plan
         run: terraform -chdir=environments/dev plan -var-file=dev.tfvars
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main'
+        run: terraform -chdir=environments/$ENVIRONMENT apply -auto-approve -var-file=$ENVIRONMENT.tfvars
