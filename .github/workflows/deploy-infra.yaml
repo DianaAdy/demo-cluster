@@ -80,6 +80,12 @@ jobs:
           fi
           echo "ENVIRONMENT=$ENVIRONMENT" >> $GITHUB_OUTPUT
 
+      # Debug: Print ENVIRONMENT and check the file path
+      - name: Debug ENVIRONMENT and File Path
+        run: |
+          echo "ENVIRONMENT: $ENVIRONMENT"
+          echo "Variable file path: environments/$ENVIRONMENT/dev.tfvars"
+
       # Terraform Format Check
       - name: Terraform Format
         run: terraform fmt -check -recursive
