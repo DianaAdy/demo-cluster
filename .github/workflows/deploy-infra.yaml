@@ -22,7 +22,7 @@ on:
 env:
   TF_VERSION: 1.6.4
   AWS_REGION: us-west-2
-  TF_WORKING_DIR: . 
+  TF_WORKING_DIR: .
 
 jobs:
   terraform:
@@ -70,6 +70,7 @@ jobs:
           restore-keys: |
             terraform-${{ runner.os }}-
 
+      # Set Environment Variable
       - name: Set Environment Variable
         id: env
         run: |
@@ -79,7 +80,6 @@ jobs:
           fi
           echo "ENVIRONMENT=$ENVIRONMENT" >> $GITHUB_OUTPUT
 
-
       # Terraform Format Check
       - name: Terraform Format
         run: terraform fmt -check -recursive
@@ -88,16 +88,15 @@ jobs:
       - name: Terraform Validate
         run: terraform validate
 
+      # Terraform Init
+      - name: Terraform Init
+        run: terraform -chdir=environments/$ENVIRONMENT init
+
       # Terraform Plan
-      - name: Terraform init
-        run: terraform -chdir=environments/dev init
-
       - name: Terraform Plan
-        run: terraform -chdir=environments/dev plan -var-file=dev.tfvars -var="github_actions_terraform_role=${{ secrets.AWS_TERRAFORM_ROLE }}"
+        run: terraform -chdir=environments/$ENVIRONMENT plan -var-file=environments/$ENVIRONMENT/dev.tfvars -var="github_actions_terraform_role=${{ secrets.AWS_TERRAFORM_ROLE }}"
 
-
+      # Terraform Apply
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
         run: terraform -chdir=environments/$ENVIRONMENT apply -auto-approve -var-file=environments/$ENVIRONMENT/dev.tfvars
-
-
