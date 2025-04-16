@@ -93,7 +93,8 @@ jobs:
         run: terraform -chdir=environments/dev init
 
       - name: Terraform Plan
-        run: terraform -chdir=environments/dev plan -var-file=dev.tfvars
+        run: terraform -chdir=environments/dev plan -var-file=dev.tfvars -var="github_actions_terraform_role=${{ secrets.AWS_TERRAFORM_ROLE }}"
+
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
