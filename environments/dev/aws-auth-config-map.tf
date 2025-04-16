@@ -1,6 +1,5 @@
 
 data "aws_caller_identity" "current" {}
-
 resource "kubernetes_config_map" "aws_auth" {
   metadata {
     name      = "aws-auth"
@@ -24,7 +23,6 @@ resource "kubernetes_config_map" "aws_auth" {
   groups:
     - system:masters
 EOT
-    # Add the IAM user `mike` here
     mapUsers = <<EOT
 - userarn: arn:aws:iam::160885273651:user/diana
   username: diana

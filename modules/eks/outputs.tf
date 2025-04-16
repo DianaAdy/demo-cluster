@@ -21,4 +21,8 @@ output "eks_cluster_certificate_authority_data" {
   value       = aws_eks_cluster.eks_cluster.certificate_authority[0].data
   description = "The certificate authority data of the EKS cluster"
 }
+output "eks_worker_role_arn" {
+  value = aws_iam_role.eks_worker_role.arn
+}
+
 
