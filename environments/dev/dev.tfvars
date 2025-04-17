@@ -30,3 +30,4 @@ on_demand_percentage         = 50
 spot_max_price               = "0.08"
 key_name                     = "eks-key-prod"
 max_session_duration_cluster = 43200
+cloudwatch_addon_role_arn = "arn:aws:iam::160885273651:role/AmazonEKSCloudWatchObservabilityRole"

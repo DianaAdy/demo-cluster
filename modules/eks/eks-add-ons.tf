@@ -33,3 +33,11 @@ resource "aws_eks_addon" "ebs_csi" {
 
   depends_on = [aws_eks_cluster.eks_cluster, aws_autoscaling_group.eks_asg]
 }
+
+resource "aws_eks_addon" "cloudwatch_observability" {
+  cluster_name            = var.cluster_name
+  addon_name              = "amazon-cloudwatch-observability"
+  addon_version           = "v3.6.0-eksbuild.2"
+  resolve_conflicts       = "OVERWRITE"
+  service_account_role_arn = var.cloudwatch_addon_role_arn
+}

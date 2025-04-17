@@ -72,3 +72,8 @@ variable "github_actions_terraform_role" {
   description = "GitHub Actions Terraform Role Name"
   type        = string
 }
+
+variable "cloudwatch_addon_role_arn" {
+  description = "IAM role ARN for the CloudWatch Observability add-on"
+  type        = string
+}

@@ -28,4 +28,5 @@ module "eks" {
   spot_max_price                = var.spot_max_price
   key_name                      = var.key_name
   github_actions_terraform_role = var.github_actions_terraform_role
+  cloudwatch_addon_role_arn   = var.cloudwatch_addon_role_arn 
 }
