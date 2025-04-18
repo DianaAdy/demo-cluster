@@ -2,6 +2,7 @@ resource "aws_eks_addon" "vpc_cni" {
   cluster_name                = aws_eks_cluster.eks_cluster.name
   addon_name                  = "vpc-cni"
   addon_version               = "v1.19.2-eksbuild.1"
+  resolve_conflicts_on_create = "OVERWRITE"
   resolve_conflicts_on_update = "OVERWRITE"
 
   depends_on = [aws_eks_cluster.eks_cluster, aws_autoscaling_group.eks_asg]
@@ -11,6 +12,7 @@ resource "aws_eks_addon" "coredns" {
   cluster_name                = aws_eks_cluster.eks_cluster.name
   addon_name                  = "coredns"
   addon_version               = "v1.11.4-eksbuild.2"
+  resolve_conflicts_on_create = "OVERWRITE"
   resolve_conflicts_on_update = "OVERWRITE"
 
   depends_on = [aws_eks_cluster.eks_cluster, aws_autoscaling_group.eks_asg]
@@ -20,6 +22,7 @@ resource "aws_eks_addon" "kube_proxy" {
   cluster_name                = aws_eks_cluster.eks_cluster.name
   addon_name                  = "kube-proxy"
   addon_version               = "v1.31.3-eksbuild.2"
+  resolve_conflicts_on_create = "OVERWRITE"
   resolve_conflicts_on_update = "OVERWRITE"
 
   depends_on = [aws_eks_cluster.eks_cluster, aws_autoscaling_group.eks_asg]
@@ -29,15 +32,21 @@ resource "aws_eks_addon" "ebs_csi" {
   cluster_name                = aws_eks_cluster.eks_cluster.name
   addon_name                  = "aws-ebs-csi-driver"
   addon_version               = "v1.39.0-eksbuild.1"
+  resolve_conflicts_on_create = "OVERWRITE"
   resolve_conflicts_on_update = "OVERWRITE"
 
   depends_on = [aws_eks_cluster.eks_cluster, aws_autoscaling_group.eks_asg]
 }
 
 resource "aws_eks_addon" "cloudwatch_observability" {
-  cluster_name            = var.cluster_name
-  addon_name              = "amazon-cloudwatch-observability"
-  addon_version           = "v3.6.0-eksbuild.2"
-  resolve_conflicts       = "OVERWRITE"
-  service_account_role_arn = var.cloudwatch_addon_role_arn
+  cluster_name                = aws_eks_cluster.eks_cluster.name
+  addon_name                  = "amazon-cloudwatch-observability"
+  addon_version               = "v3.6.0-eksbuild.2"
+  service_account_role_arn    = var.cloudwatch_addon_role_arn
+  resolve_conflicts_on_create = "OVERWRITE"
+  resolve_conflicts_on_update = "OVERWRITE"
+
+  tags = {
+    Name = "cloudwatch-observability"
+  }
 }
